@@ -5,7 +5,7 @@ def guess(s, g, mr):
     state = False
     while(state == False and mr > 0):
     
-        print("You have", mr, "retries.")
+        print(f"You have {mr} retry")
         mr = mr - 1
     
         if g == s:
@@ -18,8 +18,6 @@ def guess(s, g, mr):
             g = int(input("Your number is lower, try again: "))
 
     return game
-        
-        
 
 
 max_retry = 5
