@@ -5,7 +5,7 @@ def guess(s, g, mr):
     state = False
     while(state == False and mr > 0):
     
-        print(f"You have {mr} retry")
+        print(f"You have {mr - 1} retry")
         mr = mr - 1
     
         if g == s:
@@ -20,7 +20,7 @@ def guess(s, g, mr):
     return game
 
 
-max_retry = 5
+max_retry = 5 + 1 
 secret = r.randint(1, 20)
 guess_number = int(input("Guess what i am thinking of: "))
 
