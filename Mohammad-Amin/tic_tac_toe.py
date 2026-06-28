@@ -13,7 +13,7 @@ def setup_screen():
 
 def setup_pen():
     pen = t.Turtle()
-    pen.speed(5)
+    pen.speed(0) # 0 = fastest
     pen.hideturtle()
     pen.pensize(3)
     pen.color("white")
@@ -28,7 +28,6 @@ def draw_line(pen, start, end):
 
 def canvas(pen):
     for i in range(4):
-        print(i)
         x = -HALF + i * CELL_SIZE
         draw_line(pen, (x, -HALF), (x, HALF))
     
@@ -72,42 +71,81 @@ def reserve(move):
         print(f"Error: {error} Try again.")
         return False
 
-def check_value(row, col):
+# def check_move_number(move_number):
+    # try:
+    #     if int(move_number) >= 1 and int(move_number) <= 9:
+    #         return True
+    #     else:
+    #         raise ValueError("Your number should be between 1 to 9")
+    # except ValueError as error:
+    #     print(f"Error: {error}, Try again.")
+    #     return False
+    
+def check_move_number(move_number):
     try:
-        if (row >= 0 and row <= 2) and (col >= 0 and col <= 2):
-            return True
-        else:
-            raise ValueError("Your numbers should be between 0 and 2")
-    except ValueError as error:
-        print(f"Error: {error}, Try Again.")
+        num = int(move_number)  # اگه خطا داد، به except میره
+    except ValueError:
+        print("Error: Please enter a number between 1 and 9, Try again.")
+        return False
+    
+    if 1 <= num <= 9:
+        return True
+    else:
+        print("Error: Your number should be between 1 to 9, Try again.")
         return False
 
+def check_count(count):
+    if count < 8:
+        return True
+    else:
+        print("Game Over.")
+        quit()
+    
 def main():
     screen = setup_screen()
     pen = setup_pen()
     canvas(pen)
 
-    state = 1
-    while(state == 1):
+    move_list = {"0": (2,0), "1": (2,1), "2": (2,2), "3": (1,0), "4": (1,1), "5": (1,2), "6": (0,0), "7": (0,1), "8": (0,2)}
+    count = 0
+    state = "Game On"
+    shape = "x"
+    while(True):
         while True:
-            row = int(input("Enter row: ")) # row
-            col = int(input("Enter column: ")) # column
-            shape = input("enter x for cross and o for circle: ")
+
+            if count % 2 == 0:
+                shape = "x"
+            else:
+                shape = "o"
+
+            while True:
+                move_number = input(f"Player {shape} your turn (1-9) or 'e' to exit: ").strip()
+                
+                if move_number.lower() == "e":
+                    quit()
+                
+                if check_move_number(move_number):
+                    break
+            
+            move_number = str(int(move_number) - 1)
+
+            row = move_list[move_number][0]
+            col = move_list[move_number][1]
 
             move = (row, col, shape)
         
-            if reserve(move) and check_value(row, col): # == True
+            if reserve(move) and check_count(count): # == True
                 break
 
         t.pendown()
-
+    
         if shape == "x":
             draw_x(pen, row, col)
         else:
             draw_o(pen, row, col)
         
-        
-        state = int(input("do you want to continue? "))
+        count = count + 1
+
     t.done()
 
 main()
