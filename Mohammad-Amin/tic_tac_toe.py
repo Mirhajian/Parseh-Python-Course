@@ -98,9 +98,34 @@ def check_count(count):
     if count < 8:
         return True
     else:
-        print("Game Over.")
+        print("Game Over. Result: Draw.")
         quit()
+
+def check_win(shape):
+    board = [[None, None, None] for _ in range(3)]
+
+    for row, col, s in SPOTS:
+        board[row][col] = s
+
+    # check row
+    for i in range(3):
+        if board[i][0] == board[i][1] == board[i][2] == shape:
+            return True
     
+    # check col
+    for j in range(3):
+        if board[0][j] == board[1][j] == board[2][j] == shape:
+            return True
+        
+    if board[0][0] == board[1][1] == board[2][2] == shape:
+        return True
+    
+    if board[0][2] == board[1][1] == board[2][0] == shape:
+        return True
+    
+    return False
+
+
 def main():
     screen = setup_screen()
     pen = setup_pen()
@@ -134,8 +159,10 @@ def main():
 
             move = (row, col, shape)
         
-            if reserve(move) and check_count(count): # == True
+            if reserve(move): # == True
                 break
+
+            
 
         t.pendown()
     
@@ -146,6 +173,14 @@ def main():
         
         count = count + 1
 
+        if check_win(shape):
+            print(f"Player {shape}👑 won the game! 🎉")
+            break
+ 
+        if not check_count(count):
+            break
+
+    
     t.done()
 
 main()
